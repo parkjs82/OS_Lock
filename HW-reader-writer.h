@@ -11,7 +11,7 @@
 #endif
 
 #define MAX_WORKERS 10
-#define TICK sleep(1)    // 1/100초 단위로 하고 싶으면 usleep(10000)
+#define TICK everyT()    // 1/100초 단위로 하고 싶으면 usleep(10000)
 #define TAB 10
 
 typedef struct rwlock_t rwlock_t;
@@ -26,6 +26,7 @@ void rwlock_release_readlock(struct rwlock_t *rw);
 void rwlock_acquire_writelock(struct rwlock_t *rw);
 void rwlock_release_writelock(struct rwlock_t *rw);
 
+void everyT();
 void space(int s);
 void space_end();
 

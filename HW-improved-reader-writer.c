@@ -181,18 +181,35 @@ int main(int argc, char *argv[]) {
 
     char* fil = argv[1];
     FILE* fp = fopen(fil,"r");
-    char buffer[1000] = {0,};
+    char buffer[100] = {0,};
     fgets(buffer, 100, fp);
-    num_workers = (int)(buffer[0]-'0');
+    num_workers = (int)(buffer[0]-'0'); // -n 6 을 첫번째 줄 입력으로 대신 받음
     printf("%d\n",num_workers);
 
     for (int i = 0; i < num_workers; i++) {
         fgets(buffer, 100, fp);
+        int tmp[3] = {0,},cnt=0;
+        int tmpnum=0;
+        for(int i = 0;i<10;i++){
+            if(buffer[i] == ':'){
+                tmp[cnt++] = tmpnum;
+                tmpnum = 0;
+            }
+            else if(buffer[i] <'0' || buffer[i]>'9'){ //
+                break;
+            }
+            else{
+                tmpnum*=10;
+                tmpnum+=(int)(buffer[i]-'0');
+            }
+        }
+        tmp[cnt] = tmpnum;
         a[i].thread_id = i;
-        a[i].job_type = (int)(buffer[0]-'0'); // 0: reader, 1: writer
-        a[i].arrival_delay = (int)(buffer[2]-'0');
-        a[i].running_time = (int)(buffer[4]-'0');
+        a[i].job_type = tmp[0]; // 0: reader, 1: writer
+        a[i].arrival_delay = tmp[1];
+        a[i].running_time = tmp[2];
         printf("%d %d %d\n", a[i].job_type, a[i].arrival_delay,a[i].running_time);
+
     }
     
     printf("begin\n\n");   
